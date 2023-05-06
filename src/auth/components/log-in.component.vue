@@ -1,8 +1,42 @@
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import authApiService from "@/auth/services/auth-api.service";
+import router from "@/router";
 
 export default defineComponent({
     name: 'login-view',
+    setup() {
+        const email = ref('');
+        const password = ref('');
+        const errorMessage = ref('');
+
+        const loginUser = async () => {
+            try {
+                const user = await authApiService.getUserByEmail(email.value);
+
+                if (!user) {
+                    errorMessage.value = 'User not found';
+                    return;
+                }
+
+                if (user.password !== password.value) {
+                    errorMessage.value = 'Incorrect password';
+                    return;
+                }
+
+                // Simulacion de login
+                localStorage.setItem('isAuthenticated', 'true');
+
+                console.log('User logged in:', user);
+                router.push('/');
+            } catch (error) {
+                errorMessage.value = 'An error occurred';
+                console.error(error);
+            }
+        };
+
+        return { email, password, loginUser, errorMessage };
+    },
 });
 </script>
 
@@ -29,14 +63,14 @@ export default defineComponent({
                     <pv-button text raised>Sign up</pv-button>
                 </RouterLink>
               </div>
-              <form>
-                <br>
-                <pv-inputText type="text" placeholder="Email"/>
-                <br>
-                <pv-inputText type="text" placeholder="Password"/>
-                <br>
-                <pv-button type="submit" raised>Submit</pv-button>
-              </form>
+                <form @submit.prevent="loginUser">
+                    <br>
+                    <pv-inputText type="text" v-model="email" placeholder="Email" />
+                    <br>
+                    <pv-inputText type="text" v-model="password" placeholder="Password" />
+                    <br>
+                    <pv-button type="submit" raised>Submit</pv-button>
+                </form>
             </div>
           </template>
       </pv-card>
@@ -156,4 +190,5 @@ export default defineComponent({
     font-size: 2.5rem;
   }
 }
+
 </style>
