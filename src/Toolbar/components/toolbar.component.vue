@@ -9,6 +9,7 @@
             <button @click="selectedTab = 'calendar'" :class="selectedTab === 'calendar' ? 'selected' : ''">Calendar</button>
             <button @click="selectedTab = 'plots'" :class="selectedTab === 'plots' ? 'selected' : ''">Plots</button>
             <button @click="selectedTab = 'forecast'" :class="selectedTab === 'forecast' ? 'selected' : ''">Forecast</button>
+            <button @click="selectedTab = 'professional'" :class="selectedTab === 'professional' ? 'selected' : ''">Professional</button>
         </div>
         <div class="view-container">
             <component :is="selectedTab + '-component'" />
@@ -18,10 +19,12 @@
 
 <script>
 import PlantsComponent from "@/plants/components/plants.component.vue";
+import ProfessionalComponent from "@/professional/components/professional.component.vue";
 export default {
     name: "toolbar.component",
     components: {
         'plants-component': PlantsComponent,
+        'professional-component': ProfessionalComponent
     },
     data() {
         return {
