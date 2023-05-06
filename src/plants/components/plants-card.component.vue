@@ -11,6 +11,7 @@
                 label="Details"
                 rounded
                 style="width: 90%; background-color: #cf8509; border-color: transparent"
+                @click="onDetailsButtonClick"
             />
         </template>
     </pv-card>
@@ -74,10 +75,6 @@ export default {
             type: Object,
             required: true,
         },
-        showDetails: {
-            type: Function,
-            required: true,
-        },
     },
     components: {
         PvCard: Card,
@@ -91,6 +88,11 @@ export default {
         return {
             
         };
+    },
+    methods: {
+        onDetailsButtonClick() {
+            this.$emit("detailsButtonClick", this.plantData.id);
+        },
     },
 };
 </script>
