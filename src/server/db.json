@@ -153,5 +153,49 @@
       "intervaleFumig": 3,
       "savePlant": false
     }
+  ],
+  "plots": [
+    {
+      "quantity": "ABC",
+      "name": "ABC",
+      "area": "ABC",
+      "detail": "ABC",
+      "id": 3
+    },
+    {
+      "quantity": 0,
+      "name": "",
+      "area": "",
+      "detail": "",
+      "id": 6
+    },
+    {
+      "quantity": 0,
+      "name": "",
+      "area": "",
+      "detail": "",
+      "id": 7
+    },
+    {
+      "quantity": 0,
+      "name": "",
+      "area": "",
+      "detail": "",
+      "id": 8
+    },
+    {
+      "quantity": 9,
+      "name": "Cebolla",
+      "area": "15000",
+      "detail": "CebollaaaaAA",
+      "id": 9
+    },
+    {
+      "quantity": "GGG",
+      "name": "GG",
+      "area": "GG",
+      "detail": "GG",
+      "id": 10
+    }
   ]
 }

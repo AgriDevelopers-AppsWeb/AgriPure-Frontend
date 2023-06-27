@@ -9,6 +9,7 @@
             <button @click="selectedTab = 'plants'" :class="selectedTab === 'plants' ? 'selected' : ''">Plants</button>
             <button @click="selectedTab = 'calendar'" :class="selectedTab === 'calendar' ? 'selected' : ''">Calendar</button>
             <button @click="selectedTab = 'plots'" :class="selectedTab === 'plots' ? 'selected' : ''">Plots</button>
+            <button @click="selectedTab = 'plotsView'" :class="selectedTab === 'plotsView' ? 'selected' : ''">Plots Manage</button>
             <button @click="selectedTab = 'forecast'" :class="selectedTab === 'forecast' ? 'selected' : ''">Forecast</button>
             <button @click="selectedTab = 'professional'"  :class="selectedTab === 'professional' ? 'selected' : ''">Professional</button>
         </div>
@@ -22,12 +23,14 @@
 import PlantsComponent from "@/plants/components/plants.component.vue";
 import ProfessionalComponent from "@/professional/components/professional.component.vue";
 import PlotsComponent from "@/plots/components/plots.component.vue";
+import PlotsViewComponent from "@/plots/components/plotsView.component.vue";
 export default {
     name: "toolbar.component",
     components: {
         'plants-component': PlantsComponent,
         'professional-component': ProfessionalComponent,
-        'plots-component': PlotsComponent
+        'plots-component': PlotsComponent,
+        'plotsView-component': PlotsViewComponent,
     },
     data() {
         return {
