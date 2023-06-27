@@ -1,8 +1,37 @@
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref , reactive } from 'vue';
+import authApiService from "@/auth/services/auth-api.service";
+import router from "@/router";
 
 export default defineComponent({
     name: 'login-view',
+    setup() {
+        const form = reactive({
+            username: '',
+            password: ''
+        });
+        const errorMessage = ref('');
+
+        const loginUser = async () => {
+            const loginData = {
+                username: form.username,
+                password: form.password
+            };
+
+            try {
+                await authApiService.signIn(loginData);
+                router.push('/');
+            } catch (error) {
+                errorMessage.value = error.response.data.message;
+            }
+        };
+
+        return {
+            form,
+            errorMessage,
+            loginUser
+        };
+    }
 });
 </script>
 
@@ -29,14 +58,14 @@ export default defineComponent({
                     <pv-button text raised>Sign up</pv-button>
                 </RouterLink>
               </div>
-              <form>
-                <br>
-                <pv-inputText type="text" placeholder="Email"/>
-                <br>
-                <pv-inputText type="text" placeholder="Password"/>
-                <br>
-                <pv-button type="submit" raised>Submit</pv-button>
-              </form>
+                <form @submit.prevent="loginUser">
+                    <br>
+                    <pv-inputText type="text" v-model="form.username" placeholder="Username" />
+                    <br>
+                    <pv-inputText type="password" v-model="form.password" placeholder="Password" />
+                    <br>
+                    <pv-button type="submit" raised>Submit</pv-button>
+                </form>
             </div>
           </template>
       </pv-card>
@@ -156,4 +185,5 @@ export default defineComponent({
     font-size: 2.5rem;
   }
 }
+
 </style>

@@ -1,50 +1,92 @@
-<script>
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    name: 'register-component',
-});
-</script>
-
 <template>
   <div class="bg-container">
     <div class="form-container">
       <pv-card>
-          <template #header>
-            <div class="header">
-              <div class="logo-container">
-                <img class="logo" src="src/assets/logo.png" alt="logo">
-                <span>AgriPure</span>
-              </div>
+        <template #header>
+          <div class="header">
+            <div class="logo-container">
+              <img class="logo" src="src/assets/logo.png" alt="logo">
+              <span>AgriPure</span>
             </div>
-          </template>
+          </div>
+        </template>
 
-          <template #content>
-            <div class="content">
-              <div class="btn-container">
-                <RouterLink to="/login">
-                    <pv-button text raised>Log in</pv-button>
-                </RouterLink>
-                <RouterLink to="/register">
-                    <pv-button text raised>Sign up</pv-button>
-                </RouterLink>
-              </div>
-              <form>
-                <br>
-                <pv-inputText type="text" placeholder="Username"/>
-                <br>
-                <pv-inputText type="text" placeholder="Email"/>
-                <br>
-                <pv-inputText type="text" placeholder="Password"/>
-                <br>
-                <pv-button type="submit" raised>Submit</pv-button>
-              </form>
+        <template #content>
+          <div class="content">
+            <div class="btn-container">
+              <RouterLink to="/login">
+                <pv-button text raised>Log in</pv-button>
+              </RouterLink>
+              <RouterLink to="/register">
+                <pv-button text raised>Sign up</pv-button>
+              </RouterLink>
             </div>
-          </template>
+            <form @submit.prevent="submitForm">
+              <br>
+              <pv-inputText v-model="firstName" type="text" placeholder="First Name" />
+              <br>
+              <pv-inputText v-model="lastName" type="text" placeholder="Last Name" />
+              <br>
+              <pv-inputText v-model="username" type="text" placeholder="Username" />
+              <br>
+              <pv-inputText v-model="email" type="text" placeholder="Email" />
+              <br>
+              <pv-inputText v-model="password" type="password" placeholder="Password" />
+              <br>
+              <pv-button type="submit" raised>Submit</pv-button>
+            </form>
+          </div>
+        </template>
       </pv-card>
     </div>
   </div>
 </template>
+
+<script>
+import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
+import AuthApiService from '../services/auth-api.service';
+
+export default defineComponent({
+  name: 'register-component',
+  setup() {
+    const router = useRouter();
+
+    return {
+      router,
+    };
+  },
+  data() {
+    return {
+      firstName: '',
+      lastName: '',
+      username: '',
+      email: '',
+      password: '',
+    };
+  },
+  methods: {
+    submitForm() {
+      const registerData = {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        username: this.username,
+        email: this.email,
+        password: this.password,
+      };
+
+      AuthApiService.signUp(registerData)
+        .then(() => {
+          this.router.push('/login');
+        })
+        .catch(error => {
+          console.error('Error en el registro:', error);
+        });
+    },
+  },
+});
+</script>
+
 <style scoped>
 .bg-container {
   width: 100%;
