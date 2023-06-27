@@ -2,7 +2,7 @@
   <div class="plants-view">
     <div v-if="currentView === 'plants-list'">
       <div class="header-container">
-        <h2 style="color: white">Good morning User</h2>
+        <h2 style="color: white">Search for plants</h2>
         <span class="p-input-icon-right">
           <i class="pi pi-search" :style="iconStyle" />
           <PvInputText
@@ -12,10 +12,9 @@
             :style="inputStyle"
             class="custom-input"
           />
-          <button class="search-btn" @click="showSearch">Search</button>
         </span>
       </div>
-      <h2 style="display: flex; color: white; margin-left: 5%">Your plants:</h2>
+      <h2 style="display: flex; color: white; margin-left: 5%">All plants:</h2>
       <div class="cards-container">
         <div
           class="row"
@@ -31,17 +30,19 @@
         </div>
       </div>
     </div>
-    <div v-else-if="currentView === 'search-plants'">
-      <search-plants-component
-        :plants="plants"
-        @returnToPlantsList="currentView = 'plants-list'"
-      />
-    </div>
     <div v-else>
       <plants-details-component
         ref="detailsComponent"
         :plantData="plantDetails"
         @backButtonClick="currentView = 'plants-list'"
+      />
+    </div>
+    <div class="button-container">
+      <PvButton
+        severity="help"
+        label=" Return to Your Plants"
+        @click="returnToYourPlants"
+        style="align-items: center !important"
       />
     </div>
   </div>
@@ -87,18 +88,9 @@
   display: inline-block;
   margin: auto;
 }
-.search-btn {
-  margin-left: 10px;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #4caf50;
-  color: white;
-  cursor: pointer;
-}
-
-.search-btn:hover {
-  background-color: #45a049;
+.button-container {
+  display: flex;
+  justify-content: center;
 }
 </style>
 
@@ -106,18 +98,18 @@
 import InputText from "primevue/inputtext";
 import plantsCardComponent from "@/plants/components/plants-card.component.vue";
 import "primeicons/primeicons.css";
-import authApiService from "@/auth/services/auth-api.service";
 import { PlantsApiService } from "@/plants/services/plants-api.service";
 const plantsApiService = new PlantsApiService();
 import PlantsDetailsComponent from "@/plants/components/plants-details.component.vue";
-import SearchPlantsComponent from "@/plants/components/search-plants.component.vue";
+import Button from "primevue/button";
 
 export default {
+  name: "search-plants-component",
   components: {
     plantsCardComponent,
     PvInputText: InputText,
     PlantsDetailsComponent,
-    SearchPlantsComponent,
+    PvButton: Button,
   },
   data() {
     return {
@@ -132,11 +124,12 @@ export default {
       plantDetails: {},
     };
   },
+  async created() {
+    const response = await plantsApiService.getAll();
+    this.plants = response.data;
+    this.groupedPlants = this.chunkArray(this.plants, 3);
+  },
   methods: {
-    getCurrentUserId() {
-      const response = JSON.parse(localStorage.getItem("userData"));
-      return response.id;
-    },
     chunkArray(array, chunkSize) {
       const result = [];
       for (let i = 0; i < array.length; i += chunkSize) {
@@ -148,9 +141,6 @@ export default {
       this.currentView = "plants-details";
       this.fetchPlantDetails(plantId);
     },
-    showSearch() {
-      this.currentView = "search-plants";
-    },
     async fetchPlantDetails(plantId) {
       try {
         const response = await plantsApiService.getById(plantId);
@@ -159,13 +149,9 @@ export default {
         console.error("Error al obtener detalles de la planta:", error);
       }
     },
-  },
-  async created() {
-    const response = await authApiService.getSavedPlantsByUserId(
-      this.getCurrentUserId()
-    );
-    this.plants = response.data;
-    this.groupedPlants = this.chunkArray(this.plants, 3);
+    returnToYourPlants() {
+      this.$emit("returnToPlantsList");
+    },
   },
 };
 </script>
