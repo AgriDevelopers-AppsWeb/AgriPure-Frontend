@@ -11,7 +11,7 @@
     </h4>
     <div class="img-container">
       <img :src="plantData.image" alt="Plant Image" />
-      <img :src="plantData.image" alt="Plant Image" />
+      <img :src="plantData.image2" alt="Plant Image" />
     </div>
     <div class="accordion-container">
       <PVAccordion :activeIndex="0">
@@ -43,51 +43,19 @@
       </PVAccordion>
       <div class="buttons-container">
         <PVButton label="To return" @click="$emit('backButtonClick')" />
+        <PVButton
+          v-if="isPlantSaved"
+          severity="danger"
+          label="Delete Plant"
+          @click="deletePlant"
+        />
+        <PVButton
+          severity="success"
+          v-else
+          label="Save Plant"
+          @click="savePlant"
+        />
       </div>
-    </div>
-  </div>
-  <div class="accordion-container">
-    <PVAccordion :activeIndex="0">
-      <PVAccordionTab header="Land type">
-        <p>
-          {{ plantData.infolandType }}
-        </p>
-      </PVAccordionTab>
-      <PVAccordionTab header="Planting distance between plants">
-        <p>
-          {{ plantData.infoDistanceBetween }}
-        </p>
-      </PVAccordionTab>
-      <PVAccordionTab header="Ideal depth for planting">
-        <p>
-          {{ plantData.infoIdealDepth }}
-        </p>
-      </PVAccordionTab>
-      <PVAccordionTab header="Weather conditions">
-        <p>
-          {{ plantData.infoWeatherConditions }}
-        </p>
-      </PVAccordionTab>
-      <PVAccordionTab header="Fertilization and Fumigation">
-        <p>
-          {{ plantData.infoFertFumig }}
-        </p>
-      </PVAccordionTab>
-    </PVAccordion>
-    <div class="buttons-container">
-      <PVButton label="To return" @click="$emit('backButtonClick')" />
-      <PVButton
-        v-if="isPlantSaved"
-        severity="danger"
-        label="Delete Plant"
-        @click="deletePlant"
-      />
-      <PVButton
-        severity="success"
-        v-else
-        label="Save Plant"
-        @click="savePlant"
-      />
     </div>
   </div>
 </template>
