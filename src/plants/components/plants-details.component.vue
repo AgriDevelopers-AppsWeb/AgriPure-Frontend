@@ -7,7 +7,7 @@
       <h4 style="display: flex; color: white; margin-left: 5%">Variety:{{ plantData.variety }}</h4>
       <div class="img-container">
         <img :src="plantData.image" alt="Plant Image" />
-        <img :src="plantData.image" alt="Plant Image" />
+        <img :src="plantData.image2" alt="Plant Image" />
       </div>
         <div class="accordion-container">
         <PVAccordion :activeIndex="0">

@@ -1,42 +1,37 @@
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref , reactive } from 'vue';
 import authApiService from "@/auth/services/auth-api.service";
 import router from "@/router";
 
 export default defineComponent({
     name: 'login-view',
     setup() {
-        const email = ref('');
-        const password = ref('');
+        const form = reactive({
+            username: '',
+            password: ''
+        });
         const errorMessage = ref('');
 
         const loginUser = async () => {
+            const loginData = {
+                username: form.username,
+                password: form.password
+            };
+
             try {
-                const user = await authApiService.getUserByEmail(email.value);
-
-                if (!user) {
-                    errorMessage.value = 'User not found';
-                    return;
-                }
-
-                if (user.password !== password.value) {
-                    errorMessage.value = 'Incorrect password';
-                    return;
-                }
-
-                // Simulacion de login
-                localStorage.setItem('isAuthenticated', 'true');
-
-                console.log('User logged in:', user);
+                await authApiService.signIn(loginData);
                 router.push('/');
             } catch (error) {
-                errorMessage.value = 'An error occurred';
-                console.error(error);
+                errorMessage.value = error.response.data.message;
             }
         };
 
-        return { email, password, loginUser, errorMessage };
-    },
+        return {
+            form,
+            errorMessage,
+            loginUser
+        };
+    }
 });
 </script>
 
@@ -65,9 +60,9 @@ export default defineComponent({
               </div>
                 <form @submit.prevent="loginUser">
                     <br>
-                    <pv-inputText type="text" v-model="email" placeholder="Email" />
+                    <pv-inputText type="text" v-model="form.username" placeholder="Username" />
                     <br>
-                    <pv-inputText type="text" v-model="password" placeholder="Password" />
+                    <pv-inputText type="password" v-model="form.password" placeholder="Password" />
                     <br>
                     <pv-button type="submit" raised>Submit</pv-button>
                 </form>
